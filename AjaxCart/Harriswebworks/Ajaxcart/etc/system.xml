@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Harriswebworks_Newproducts extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category       Harriswebworks
+ * @package        Harriswebworks_Newproducts
+ * @copyright      Copyright (c) 2017
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ */
+--> 
+<config>
+    <tabs>
+        <harriswebworks translate="label" module="harriswebworks_ajaxcart">
+            <label><![CDATA[<div style=""><img id="harriswebworks_block" src="" alt="Harriswebworks" border="0" width="120" /></div><script>
+            var n = SKIN_URL.indexOf("adminhtml");
+            $('harriswebworks_block').src = SKIN_URL.substring(0, n) + "adminhtml/default/default/images/harriswebworks/HWW-logo.png";
+            </script>]]></label>
+            <sort_order>150</sort_order>
+        </harriswebworks>
+    </tabs>
+    <sections>
+		<harriswebworks_info translate="label">
+            <label>Info</label>
+            <tab>harriswebworks</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>1000000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <info>
+                    <frontend_model>harriswebworks_ajaxcart/adminhtml_info</frontend_model>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </info>
+            </groups>
+        </harriswebworks_info>
+	
+	
+        <harriswebworks_ajaxcart translate="label" module="harriswebworks_ajaxcart">
+            <class>separator-top</class>
+            <label>Ajax Cart</label>
+            <tab>harriswebworks</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+			<about>
+                    <frontend_model>harriswebworks_ajaxcart/adminhtml_about</frontend_model>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </about>
+			
+                <ajaxcart translate="label" module="harriswebworks_ajaxcart">
+                    <label>Ajax Cart</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_ajaxcart translate="label">
+                            <label>Enable Ajaxcart</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_ajaxcart>
+						<enable_wishlist translate="label">
+                            <label>Enable WishList</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_wishlist>
+                    </fields>
+                </ajaxcart>
+            </groups>
+        </harriswebworks_ajaxcart>
+    </sections>
+</config>

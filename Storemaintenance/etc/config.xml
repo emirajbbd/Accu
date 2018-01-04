@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright [2014] [Harriswebworks]
+ *
+ * @package   Harriswebworks_StoreMaintenance
+ * @author    Harriswebworks
+ * @license   http://www.apache.org/licenses/LICENSE-2.0
+ */	
+-->
+<config>
+    <modules>
+        <Harriswebworks_Storemaintenance>
+            <version>2.0.0</version>
+        </Harriswebworks_Storemaintenance>
+    </modules>
+    <frontend>
+        <!--<routers>
+            <storemaintenance>
+                <use>standard</use>
+                <args>
+                    <module>Harriswebworks_Storemaintenance</module>
+                    <frontName>storemaintenance</frontName>
+                </args>
+            </storemaintenance>
+        </routers>-->
+        <!--<translate>
+            <modules>
+                <Harriswebworks_Storemaintenance>
+                    <files>
+                        <default>Harriswebworks_Storemaintenance.csv</default>
+                    </files>
+                </Harriswebworks_Storemaintenance>
+            </modules>
+        </translate>-->
+    </frontend>
+    <admin>
+        <routers>
+            <storemaintenance>
+                <use>admin</use>
+                <args>
+                    <module>Harriswebworks_Storemaintenance</module>
+                    <frontName>storemaintenance</frontName>
+                </args>
+            </storemaintenance>
+        </routers>
+    </admin>
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <harriswebworks_storemaintenance>
+                            <title>Store Notice Module</title>
+                            <sort_order>10</sort_order>
+                        </harriswebworks_storemaintenance>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <harriswebworks_storemaintenance>
+                                            <title>Harriswebworks: Store Notice</title>
+                                        </harriswebworks_storemaintenance>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <!--<translate>
+            <modules>
+                <Harriswebworks_Storemaintenance>
+                    <files>
+                        <default>Harriswebworks_Storemaintenance.csv</default>
+                    </files>
+                </Harriswebworks_Storemaintenance>
+            </modules>
+        </translate>-->
+    </adminhtml>   
+    <global>
+        <models>
+			<harriswebworks_storemaintenance>
+                <class>Harriswebworks_Storemaintenance_Model</class>
+            </harriswebworks_storemaintenance>
+        </models>
+        <resources>
+            <harriswebworks_storemaintenance_setup>
+                <setup>
+                    <module>Harriswebworks_Storemaintenance</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </harriswebworks_storemaintenance_setup>
+        </resources>
+        <blocks>
+            <harriswebworks_storemaintenance>
+                <class>Harriswebworks_Storemaintenance_Block</class>
+            </harriswebworks_storemaintenance>
+        </blocks>
+        <helpers>
+            <harriswebworks_storemaintenance>
+                <class>Harriswebworks_Storemaintenance_Helper</class>
+            </harriswebworks_storemaintenance>
+        </helpers>
+        <!--<events>
+            <controller_front_init_routers>
+                <observers>
+                    <harriswebworks_storemaintenance>
+                        <type>singleton</type>
+                        <class>Harriswebworks_Storemaintenance_Model_Observer</class>
+                        <method>initControllerStoremaintenance</method>
+                    </harriswebworks_storemaintenance>
+                </observers>
+            </controller_front_init_routers>
+        </events>-->
+    </global>
+    <default>
+        <harriswebworks_storemaintenance>
+            <storemaintenance>
+                <activate>1</activate>
+            </storemaintenance>
+        </harriswebworks_storemaintenance>
+    </default>
+</config>

@@ -1,0 +1,82 @@
+<?php
+
+/**
+
+ * Shoping Wishlist sidebar
+
+ *
+
+ * @see Mage_Wishlist_Block_Customer_Sidebar
+
+ */
+?>
+
+<?php if ($this->helper('wishlist')->isAllow()) :
+$wishcount = $this->getItemCount();
+ ?>
+<div class="block block-wishlist ajaxwishlist">
+    <div class="block-title">
+        <strong><span><?php echo $this->__('Saved Items ') ?></span>
+        <?php if($wishcount): ?><?php if ($wishcount==1): ?>
+                <span class="cartquant"><?php echo $this->__('1 item') ?></span>
+            <?php else: ?>
+                <span class="cartquant"><?php echo $this->__('%s items',  $wishcount) ?></span>
+            <?php endif ?><?php endif ?></strong>
+        
+        <a class="closewishlist" href="javascript:void(0);" title="Close"><span class="glyphicon glyphicon-remove"></span></a>
+    </div>
+    <div class="message alert alert-success"><span class="glyphicon glyphicon-ok"></span><span class="ajaxsuccessmsg">Your cart has been updated.</span></div>
+    <div class="block-content">
+    <p class="block-subtitle"><?php echo $this->__('Last Added Items') ?></p>
+    <?php if ($this->hasWishlistItems()): ?>
+    <ol class="mini-products-list" id="wishlist-sidebar">
+     <?php foreach ($this->getWishlistItems() as $_item): ?>
+        <?php $product = $_item->getProduct(); ?>
+        <li class="item">
+            <div class="product-details" style="margin-left:0px;" id="<?php echo $_item->getId() ?>_id">
+            
+            <a href="<?php echo $this->getItemRemoveUrl($_item) ?>" title="<?php echo $this->__('Remove This Item') ?>" onclick="return confirm('<?php echo $this->__('Are you sure you would like to remove this item from the wishlist?') ?>');" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
+             <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
+             <input type="hidden" class="qty" name="qty[<?php echo $product->getId() ?>]" value="<?php //echo $_item->getQty();
+			 echo Mage::getBlockSingleton('wishlist/customer_wishlist')->getAddToCartQty($_item) * 1 ?>" />
+            <button type="button" title="<?php echo $this->__('Add to Cart') ?>" data-url="<?php echo $this->getItemAddToCartUrl($_item) ?>"  class="button btn-cart wishlistminicart"><span><span class="btntxt"><img src="<?php echo $this->getSkinUrl() ?>images/icon-cart.png" title="Add" alt="Add" width="15" height="15"></span><span class="ajax_loader" style="display:none"><span class="rotating glyphicon glyphicon-refresh"></span></span></span></button>
+            <?php endif; ?>
+            
+                <p class="product-name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->escapeHtml($product->getSku()) . ' ' . $this->escapeHtml($product->getName()) ?></a></p>
+                <div class="witembotoom">
+                <div class="wqleft">
+                <strong><?php  echo Mage::getBlockSingleton('wishlist/customer_wishlist')->getAddToCartQty($_item) * 1 ?></strong> x  </div><div class="wqprice"><?php echo $this->getPriceHtml($product, false, '-wishlist') ?></div>
+               
+                   
+                
+            </div>
+        </li>
+    <?php endforeach;
+	$wishlist_id = $this->getWishlistInstance()->getId(); ?>
+    </ol>
+    <script type="text/javascript">decorateList('wishlist-sidebar');</script>
+    
+    <div class="actions">
+    <button type="button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('View Saved Items')) ?>" class="button miniwishlinkview button--ujarak" onclick="setLocation('<?php echo $this->helper('wishlist')->getListUrl() ?>')"><span><span><?php echo $this->__('View Saved Items') ?></span></span></button>
+        <button type="button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Add All to Cart')) ?>" data-url="<?php echo $this->getUrl('wishlist/index/allcart') ?>" class="button button--ujarak miniwishlink" ><span><span><?php echo $this->__('Add All to Cart') ?></span></span></button>
+        <input type="hidden" id="ajax_wishlist_id" value="<?php echo $wishlist_id; ?>">
+    </div>
+    <div class="actions additionalcartbtncon">
+    <button type="button" name="save_and_share" title="Share Saved Items" onClick="setLocation('<?php echo Mage::getUrl('wishlist/index/share', array('wishlist_id' => $wishlist_id));?>')" class="button btn-share button--ujarak"><span><span>Share Saved Items</span></span></button>
+    </div>
+    <?php else: ?>
+        <p class="empty"><?php echo $this->__('You have no items in your wishlist.') ?></p>
+    <?php endif ?>
+    </div>
+</div>
+<?php else:?>
+<div class="block block-wishlist ajaxwishlist"></div>
+<?php endif ?>
+<script type="text/javascript">
+jQuery.noConflict();
+jQuery(document).ready(function($){
+	
+});
+</script>
+
+

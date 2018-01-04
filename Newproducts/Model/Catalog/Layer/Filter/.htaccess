@@ -1,0 +1,369 @@
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^old.chefscloset.com$ [NC]
+RewriteRule ^(.*)$ http://www.chefscloset.com/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^old.tablelinensforless.com$ [NC]
+RewriteRule ^(.*)$ http://www.tablelinensforless.com/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} old.uniformsandlinens.com$ [NC]
+RewriteRule ^(.*)$ http://www.uniformsandlinens.com/$1 [R=301,L]
+
+
+##### Block unwanted Bots that clog the server #####
+RewriteCond %{HTTP_USER_AGENT} MJ12bot
+RewriteRule .* - [F]
+RewriteCond %{HTTP_USER_AGENT} 80legs [NC]
+RewriteRule ^ - [F]
+RedirectMatch 404 /\.git
+
+##### Domain-specific PHP Settings #####
+<IfModule mod_php5.c>
+    php_value magic_quotes_gpc off
+    php_value memory_limit 2048M
+    php_value max_execution_time 1024000
+    php_value max_post_size 2048M
+    php_value max_input_vars 100000
+    php_value session.auto_start off
+    php_value suhosin.get.max_vars 100000
+    php_value suhosin.post.max_vars 100000
+    php_value suhosin.request.max_vars 100000
+    php_value suhosin.session.cryptua off
+    php_value zend.ze1_compatibility_mode Off
+</IfModule>
+
+##### Necessary redirects and rewrites for search engines and APIs #####
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine on
+
+    ##### Rewrite API2 calls to api.php
+    RewriteRule ^api/rest api.php?type=rest [QSA,L]
+
+    ##### TRACE and TRACK HTTP methods disabled to prevent XSS attacks
+    RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
+    RewriteRule .* - [L,R=405]
+
+    #### Redirect from http://domain to http://www.domain ####
+    ## Comment the following three lines for sites on subdomains ##
+    #RewriteCond %{HTTP_HOST} !^mage(dev)?\..+$ [NC]
+    #RewriteCond %{HTTP_HOST} !^www\..+$ [NC]
+    #RewriteRule ^ http://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+    ## End of subdomain comment block ##
+
+    ##### Redirect away from /index.php and /home                       #####
+    ##### Warning: This index.php rewrite will prevent Magento          #####
+    ##### Connect from working. Simply comment out the                  #####
+    ##### following two lines of code when using Connect.               #####
+    ##### Please note - http://www. if not using www simply use http:// #####
+    RewriteCond %{THE_REQUEST} ^.*/index.php
+    RewriteRule ^(.*)index.php$ http://%{HTTP_HOST}/$1 [R=301,L]
+    Redirect 301 /home /
+
+    ##### Always send 404 on missing files in these folders
+    RewriteCond %{REQUEST_URI} !^/(media|skin|js)/
+
+    ##### Always send 404 on scripts
+    RewriteCond %{REQUEST_URI} .sh$
+    RewriteRule .* - [R=404,L]
+
+    ##### Never rewrite for existing files, directories and links
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-l
+
+    ##### Rewrite everything else to index.php
+    #RewriteRule server-status server-status [L]
+    RewriteRule .* index.php [L]
+</IfModule>
+
+<IfModule mod_ssl.c>
+    SSLOptions StdEnvVars
+</IfModule>
+
+##### Header Directives #####
+<ifModule mod_headers.c>
+    Header unset ETag
+    Header unset Last-Modified
+    Header set X-UA-Compatible: IE=edge
+</ifModule>
+
+##### disable POST processing to not break multiple image upload #####
+<IfModule mod_security.c>
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>
+
+##### Enable apache served files compression #####
+<IfModule mod_deflate.c>
+    # Insert filter
+    SetOutputFilter DEFLATE
+
+    # Insert filter on selected content types only
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+
+    # Fixup old browsers
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+    # Don't compress images
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+
+    # Don't compress custom option downloads
+    SetEnvIf Request_URI ^/index.php$ no-gzip dont-vary
+
+    # Make sure proxies don't deliver the wrong content
+    Header append Vary User-Agent env=!dont-vary
+</IfModule>
+
+##### Default expires headers for all file types  #####
+##### Not recommended for development environment #####
+<ifModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 seconds"
+    ExpiresByType text/html "access plus 1 seconds"
+    ExpiresByType image/x-icon "access plus 2592000 seconds"
+    ExpiresByType image/gif "access plus 2592000 seconds"
+    ExpiresByType image/jpeg "access plus 2592000 seconds"
+    ExpiresByType image/png "access plus 2592000 seconds"
+    ExpiresByType text/css "access plus 604800 seconds"
+    ExpiresByType text/javascript "access plus 216000 seconds"
+    ExpiresByType application/x-javascript "access plus 216000 seconds"
+</ifModule>
+
+##### Mime Type Caching #####
+<IfModule mod_mime.c>
+    ##### AUDIO #####
+    AddType audio/mp4                                   m4a f4a f4b
+    AddType audio/ogg                                   oga ogg
+
+    ##### JAVASCRIPT #####
+    # Normalize to standard type (it's sniffed in IE anyways):
+    # http://tools.ietf.org/html/rfc4329#section-7.2
+    AddType application/javascript                      js jsonp
+    AddType application/json                            json
+
+    ##### VIDEO #####
+    AddType video/mp4                                   mp4 m4v f4v f4p
+    AddType video/ogg                                   ogv
+    AddType video/webm                                  webm
+    AddType video/x-flv                                 flv
+
+    ##### WEB FONTS #####
+    AddType application/font-woff                       woff
+    AddType application/vnd.ms-fontobject               eot
+
+    ##### Browsers usually ignore the font MIME types   #####
+    ##### and sniff the content, however, Chrome shows  #####
+    ##### a warning if other MIME types are used for    #####
+    ##### the following fonts.                          #####
+    AddType application/x-font-ttf                      ttc ttf
+    AddType font/opentype                               otf
+
+    ##### OTHER #####
+    AddType application/octet-stream                    safariextz
+    AddType application/x-chrome-extension              crx
+    AddType application/x-opera-extension               oex
+    AddType application/x-shockwave-flash               swf
+    AddType application/x-web-app-manifest+json         webapp
+    AddType application/x-xpinstall                     xpi
+    AddType application/xml                             atom rdf rss xml
+    AddType image/webp                                  webp
+    AddType image/x-icon                                ico
+    AddType text/cache-manifest                         appcache manifest
+    AddType text/vtt                                    vtt
+    AddType text/x-component                            htc
+    AddType text/x-vcard                                vcf
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddCharset utf-8 .atom .css .js .json .rss .vtt .webapp .xml
+</IfModule>
+
+##### Disable ETags http://developer.yahoo.com/performance/rules.html#etags #####
+FileETag None
+
+##### Prevent character encoding issues from server overrides #####
+AddDefaultCharset Off
+#AddDefaultCharset UTF-8
+
+##### By default allow all access #####
+Order allow,deny
+Allow from all
+
+##### Deny access to release notes to prevent disclosure of the installed Magento version
+<Files RELEASE_NOTES.txt>
+	Order allow,deny
+	Deny from all
+</Files>
+
+##### Process robots.txt as a PHP script
+<Files robots.txt>
+    AddHandler application/x-httpd-php .txt
+    ForceType text/plain
+    <ifModule mod_headers.c>
+        Header unset ETag
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "Tue, 18 Jan 1983 05:00:00 GMT"
+    </ifModule>
+</Files>
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/css text/x-component application/x-javascript application/javascript text/javascript text/x-js text/html text/richtext image/svg+xml text/plain text/xsd text/xsl text/xml image/x-icon application/json x-font/otf x-font/ttf x-font/eot x-font/woff
+	<IfModule mod_headers.c>
+		Header append Vary User-Agent env=!dont-vary
+	</IfModule>
+	<IfModule mod_mime.c>
+		AddOutputFilter DEFLATE js css htm html xml
+	</IfModule>
+</IfModule>
+<IfModule mod_mime.c>
+	AddType text/html .html_gzip
+	AddEncoding gzip .html_gzip
+	AddType text/xml .xml_gzip
+	AddEncoding gzip .xml_gzip
+</IfModule>
+<IfModule mod_setenvif.c>
+	SetEnvIfNoCase Request_URI \.html_gzip$ no-gzip
+	SetEnvIfNoCase Request_URI \.xml_gzip$ no-gzip
+</IfModule>
+
+
+
+
+
+
+
+<ifModule mod_expires.c>
+ExpiresActive On
+ExpiresDefault A300
+ 
+# Expires after 1 day
+#ExpiresByType image/gif A86400
+#ExpiresByType image/png A86400
+#ExpiresByType image/jpg A86400
+#ExpiresByType image/x-icon A86400
+#ExpiresByType application/pdf A86400
+#ExpiresByType application/x-javascript A2592000
+#ExpiresByType text/plain A86400
+# 1 YEAR
+<FilesMatch "\.(ico|pdf|flv|woff)$">
+Header set Cache-Control "max-age=29030400, public"
+</FilesMatch>
+ 
+# 1 Month
+<FilesMatch "\.(jpg|jpeg|png|gif|swf)$">
+Header set Cache-Control "max-age=38880000, public"
+</FilesMatch>
+ 
+# 2 DAYS
+<FilesMatch "\.(xml|txt|css|js)$">
+Header set Cache-Control "max-age=31104000, proxy-revalidate"
+</FilesMatch>
+ 
+# 1 MIN
+<FilesMatch "\.(html|htm|php)$">
+Header set Cache-Control "max-age=60, private, proxy-revalidate"
+</FilesMatch>
+</ifModule>
+<IfModule mod_headers.c>
+Header set Vary "Accept-Encoding, Cookie"
+  <FilesMatch "\.(js|css|xml|gz)$">
+    Header append Vary: Accept-Encoding
+  </FilesMatch>
+</IfModule>
+<IfModule mod_deflate.c>
+    #The following line is enough for .js and .css
+   # AddOutputFilter DEFLATE js css 
+
+    #The following line also enables compression by file content type, for the following list of Content-Type:s
+   # AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml x-font/otf x-font/ttf x-font/eot x-font/woff
+
+    #The following lines are to avoid bugs with some browsers
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html 
+</IfModule>
+
+
+<IfModule mod_headers.c>
+	Header set Connection keep-alive
+  <FilesMatch "\.(js|css|xml|gz)$">
+    Header append Vary: Accept-Encoding
+  </FilesMatch>
+</IfModule>
+<IfModule mod_deflate.c>
+	SetOutputFilter DEFLATE
+	AddOutputFilter DEFLATE js css
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+	AddOutputFilterByType DEFLATE x-font/otf x-font/ttf x-font/eot x-font/woff
+    #AddOutputFilterByType DEFLATE application/x-httpd-php
+
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:pdf|doc)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:avi|mov|mp3|mp4|rm)$ no-gzip dont-vary
+	Header append Vary User-Agent env=!dont-vary
+</IfModule>
+
+
+## BEGIN EXPIRES CACHING - JCH OPTIMIZE ##
+<IfModule mod_expires.c>
+  ExpiresActive on
+
+# Perhaps better to whitelist expires rules? Perhaps.
+  ExpiresDefault "access plus 1 month"
+
+# cache.appcache needs re-requests in FF 3.6 (thanks Remy ~Introducing HTML5)
+  ExpiresByType text/cache-manifest "access plus 0 seconds"
+
+# Your document html
+  ExpiresByType text/html "access plus 0 seconds"
+
+# Data
+  ExpiresByType text/xml "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+
+# Feed
+  ExpiresByType application/rss+xml "access plus 1 hour"
+  ExpiresByType application/atom+xml "access plus 1 hour"
+
+# Favicon (cannot be renamed)
+  ExpiresByType image/x-icon "access plus 1 week"
+
+# Media: images, video, audio
+  ExpiresByType image/gif "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpg "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType video/ogg "access plus 1 month"
+  ExpiresByType audio/ogg "access plus 1 month"
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType video/webm "access plus 1 month"
+
+# HTC files (css3pie)
+  ExpiresByType text/x-component "access plus 1 month"
+
+# Webfonts
+  ExpiresByType application/x-font-ttf "access plus 1 month"
+  ExpiresByType font/opentype "access plus 1 month"
+  ExpiresByType application/x-font-woff "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+
+# CSS and JavaScript
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+
+  <IfModule mod_headers.c>
+    Header append Cache-Control "public"
+  </IfModule>
+
+</IfModule>
+## END EXPIRES CACHING - JCH OPTIMIZE ##

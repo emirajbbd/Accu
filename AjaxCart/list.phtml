@@ -1,0 +1,322 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+$currentUrl = Mage::helper('core/url')->getCurrentUrl();
+$session = Mage::getSingleton("core/session",  array("name"=>"frontend"));
+				//echo $session->getData("hideprice");
+//$hideprice = $session->getData("hideprice");
+$hideprice=0;
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+$_productCollection = $this->getLoadedProductCollection();
+$_helper = $this->helper('catalog/output');
+?>
+<?php if (!$_productCollection->count()): ?>
+    <p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+	<div style="display: none;" class="mobile-filter">	
+			<?php echo $this->getLayout()->createBlock('catalog/layer_view')->setTemplate('catalog/layer/view.phtml')->toHtml();?>
+	</div>
+    <div class="category-products">
+
+        <?php echo $this->getToolbarHtml() ?>
+        <?php // List mode ?>
+        <?php if ($this->getMode() != 'grid'): ?>
+            <?php $_iterator = 0; ?>
+            <div class="listheader listviewheader">
+                <div class="col-xs-12 col-sm-c col-md-3 prdnameh">Catalog#</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 no-left-padding prddes">Description</div>
+                <div class="col-xs-12 col-sm-2 col-md-2 prdsz">Size</div>
+                <div class="col-xs-12 col-sm-3 col-md-3 prdprs">Your Price</div>
+                <div class="clear"></div>
+            </div>
+            <ol class="products-list listview" id="products-list">
+                <?php
+                $i = 1;
+                foreach ($_productCollection as $_product):
+                    $mystring = str_replace('N/A', '', $_helper->productAttribute($_product, $_product->_data['sales_unit_size'], 'sales_unit_size'));
+                    $findme = 'mg';
+                    $pos = strpos($mystring, $findme);
+
+
+                    if ($pos === false) {
+                        $unt = "LTR";
+                    } else {
+                        $unt = "GRM";
+                    }
+                    ?>
+                    <li class="item<?php if (++$_iterator == sizeof($_productCollection)): ?> last<?php endif; ?>" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <meta itemprop="position" content="<?php echo $i; ?>" />
+                        <?php // Product Image  ?>
+                        <a name="<?php echo $_product->getSku(); ?>"></a>
+                        <div itemprop="item" itemscope itemtype="http://schema.org/Product">
+                            <div class="col col-xs-12 col-sm-3 col-md-3 prdname" >
+
+                                <meta itemprop="url" content="<?php echo $currentUrl; ?>#<?php echo $_product->getSku(); ?>" />  
+
+                                <a href="<?php echo $_product->getProductUrl() ?>" itemprop="sameAs" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image" style="width:130px;"><h2 class="product-name" itemprop="productID"><?php echo $_helper->productAttribute($_product, $_product->getSku(), 'sku'); ?></h2><?php if ($_product->getImage()) { ?><img itemprop="image" src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>" width="135" height="135" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /><?php } // end if image            ?></a>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 no-left-padding prddes">
+                                <?php // Product description  ?>
+                                <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                                <h2 class="product-name" ><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>" style="color:#781515;"><?php if ($_product->getIsnew()) { ?><strong class="new">NEW</strong><?php } ?><span itemprop="name"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?></span></a></h2>
+                                <div class="desc std" itemprop="description">
+                                <?php echo $_helper->productAttribute($_product, $_product->_data['matrix'], 'matrix'); ?>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-5 col-md-5 no-padding prdlistrightcon<?php if ($hideprice==1): ?> hideprice<?php endif; ?>" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                <div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
+                                    <div class="col-xs-12 col-sm-4 col-md-4 prdsz" itemprop="referenceQuantity" itemscope itemtype="http://schema.org/QuantitativeValue">
+                                        <?php echo str_replace('N/A', '', $_helper->productAttribute($_product, $_product->_data['sales_unit_size'], 'sales_unit_size')); ?>
+                                        <meta itemprop="value" content="<?php echo intval(str_replace('N/A', '', $_helper->productAttribute($_product, $_product->_data['sales_unit_size'], 'sales_unit_size'))) / 1000; ?>"><meta itemprop="unitCode" content="<?php echo $unt; ?>">
+                                    </div>
+                                    <div class="col-xs-12 col-sm-8 col-md-8 prdprs">
+
+                                        <meta itemprop="priceCurrency" content="USD" />
+                                        <?php if ($_product->isSaleable() && $hideprice!=1): ?>
+                                            <div class="lvprice"><?php echo $this->getPriceHtml($_product, true); ?></div>
+                                        <?php else: ?>
+                                            <span style="display:none"><?php echo $this->getPriceHtml($_product, true) ?></span>
+                                        <?php endif; ?>
+                                        <div class="prdcrt">
+                                            <meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
+                                            <ul class="add-to-links">
+                                                <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                                                                            <!--<li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist">Save</a>&nbsp;|&nbsp;
+                                                <?php endif; ?>
+                                                <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+                                                                                            <a href="<?php echo $_compareUrl ?>" class="link-compare">Compare</a></li>!-->
+                                                <?php endif; ?>
+                                            </ul>
+                                            <?php if ($_product->isSaleable()): ?>
+<?php if ($hideprice!=1): ?>
+                                                <form action="<?php echo $this->getAddToCartUrl($_product) ?>" class="listform" method="post" id="product_addtocart_form_<?php echo $_product->getId() ?>"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+                                                    <?php if (!$_product->isGrouped()): ?>
+                                                        <label for="qty"><?php //echo $this->__('Qty')           ?></label>
+                                                        <input type="text" name="qty" id="qty" maxlength="4" value="<?php echo ($this->getMinimalQty($_product) ? $this->getMinimalQty($_product) : 1) ?>" />
+                                                    <?php endif; ?>
+                                                    <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" ><span><span class="btntxt"><img src="<?php echo $this->getSkinUrl() ?>images/icon-cart.png" width="15" height="15" title="<?php echo $this->__('Add') ?>" alt="<?php echo $this->__('Add') ?>"></span><span class='ajax_loader' style='display:none'><span class="rotating glyphicon glyphicon-refresh"></span></span></span></button>
+                                                </form>
+										<?php else: ?>
+                                        <a  class="showdistributorurl distributor-location-btn" title="Click here to find the AccuStandard distributor for your location." href="<?php echo $this->getUrl(); ?>distributors"><span>&nbsp;</span></a>
+                                        <?php endif; ?>
+                                                <meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="InStock" />
+                                            <?php else: ?>
+                                                <meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="OutOfStock" />
+                                                <div style="float:right"><p class="availability out-of-stock"><span>not for individual sale<?php //echo $this->__('Out of stock')            ?></span></p></div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <?php
+                    $i++;
+                endforeach;
+                ?>
+            </ol>
+            <script type="text/javascript">decorateList('products-list', 'none-recursive')</script>
+        <?php else: ?>
+            <?php // Grid Mode    ?>
+            <div class="listheader">
+                <div class="col-xs-12 col-sm-3 col-md-3 prdnameh">Catalog#</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 prddes">Description</div>
+                <div class="col-xs-12 col-sm-2 col-md-2 prdsz">Size</div>
+                <div class="col-xs-12 col-sm-3 col-md-3 prdprs">Price</div>
+                <div class="clear"></div>
+            </div>
+            <?php $_iterator = 0; ?>
+            <ol class="products-list expandedview" id="products-list">
+                <!--<ol class="products-list gridv" id="products-list">-->
+                <?php
+                $i = 1;
+                foreach ($_productCollection as $_product):
+
+                    $mystring = str_replace('N/A', '', $_helper->productAttribute($_product, $_product->_data['sales_unit_size'], 'sales_unit_size'));
+                    $findme = 'mg';
+                    $pos = strpos($mystring, $findme);
+
+
+                    if ($pos === false) {
+                        $unt = "LTR";
+                    } else {
+                        $unt = "GRM";
+                    }
+                    ?>
+
+                    <li class="item<?php if (++$_iterator == sizeof($_productCollection)): ?> last<?php endif; ?>" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <meta itemprop="position" content="<?php echo $i; ?>" />
+                        <?php // Product Image    ?>
+                        <a name="<?php echo $_product->getSku(); ?>"></a>
+                        <div itemprop="item" itemscope itemtype="http://schema.org/Product">
+                            <div class="col col-xs-12 col-sm-3 col-md-3 prdname" >
+                                <meta itemprop="url" content="<?php echo $currentUrl; ?>#<?php echo $_product->getSku(); ?>" />
+                                <a href="<?php echo $_product->getProductUrl() ?>" itemprop="sameAs" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image" style="width:130px;"><h2 class="product-name" itemprop="productID"><?php echo $_helper->productAttribute($_product, $_product->getSku(), 'sku'); ?></h2><?php if ($_product->getImage()) { ?><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>" width="135" height="135" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /><?php } // end if image            ?></a>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 no-left-padding prddes">
+                                <?php // Product description ?>
+                                <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                                <h2 class="product-name" ><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>" style="color:#781515;"><?php if ($_product->getIsnew()) { ?><strong class="new">NEW</strong><?php } ?><span itemprop="name"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?></span></a></h2>
+                                <?php if ($_product->getRatingSummary()): ?>
+                                    <?php echo $this->getReviewsSummaryHtml($_product) ?>
+                                <?php endif; ?>
+                                <div class="desc std" itemprop="description">
+                                    <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                                    <?php
+                                    $accustandard_tmp = $_helper->productAttribute($_product, $_product->_data['pack_availability'], 'pack_availability');
+                                    if (!empty($accustandard_tmp))
+                                        echo '<br />' . $accustandard_tmp;
+                                    ?>
+                                </div>
+
+                            </div>
+                            <div class="col-xs-12 col-sm-5 col-md-5 no-padding prdlistrightcon<?php if ($hideprice==1): ?> hideprice<?php endif; ?>" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                <div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
+                                    <div class="col-xs-12 col-sm-4 col-md-4 prdsz" itemprop="referenceQuantity" itemscope itemtype="http://schema.org/QuantitativeValue">
+                                        <?php echo str_replace('N/A', '', $_helper->productAttribute($_product, $_product->_data['sales_unit_size'], 'sales_unit_size')); ?>
+                                        <meta itemprop="value" content="<?php echo intval(str_replace('N/A', '', $_helper->productAttribute($_product, $_product->_data['sales_unit_size'], 'sales_unit_size'))) / 1000; ?>"><meta itemprop="unitCode" content="<?php echo $unt; ?>">
+                                    </div>
+                                    <div class="col-xs-12 col-sm-8 col-md-8 prdprs">
+
+                                        <meta itemprop="priceCurrency" content="USD" />
+                                        <?php if ($_product->isSaleable() && $hideprice!=1): ?>
+                                            <div class="lvprice"><?php echo $this->getPriceHtml($_product, true); ?></div>
+                                        <?php else: ?>
+                                            <span style="display:none"><?php echo $this->getPriceHtml($_product, true) ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 prdcrt">
+                                    <meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
+                                    <ul class="add-to-links">
+                                        <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                            <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><span class="btntxt">Save</span><span class="ajax_loader" style="display: none;"><span class="rotating glyphicon glyphicon-refresh"></span></span></a>&nbsp;|&nbsp;
+                                            <?php endif; ?>
+                                            <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+                                                <a href="<?php echo $_compareUrl ?>" class="link-compare">Compare</a></li>
+                                        <?php endif; ?>
+                                    </ul>
+                                    <?php if ($_product->isSaleable() ): ?>
+                                    <?php if ($hideprice!=1): ?>
+                                        <form action="<?php echo $this->getAddToCartUrl($_product) ?>" class="listform" method="post" id="product_addtocart_form_<?php echo $_product->getId() ?>"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+                                            <?php if (!$_product->isGrouped()): ?>
+                                                <label for="qty"><?php echo $this->__('Qty') ?>:</label>
+                                                <input type="text" name="qty" class="qty" id="qty" maxlength="6" value="<?php echo ($this->getMinimalQty($_product) ? $this->getMinimalQty($_product) : 1) ?>" />
+                                            <?php endif; ?>
+                                            <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" ><span><span class="btntxt"><img src="<?php echo $this->getSkinUrl() ?>images/icon-cart.png" width="15" height="15" title="<?php echo $this->__('Add') ?>" alt="<?php echo $this->__('Add') ?>"></span><span class='ajax_loader' style='display:none'><span class="rotating glyphicon glyphicon-refresh"></span></span></span></button>
+                                        </form>
+                                        <?php else: ?>
+                                    <a  class="showdistributorurl distributor-location-btn" title="Click here to find the AccuStandard distributor for your location." href="<?php echo $this->getUrl(); ?>distributors"><span>&nbsp;</span></a>
+                                        <?php endif; ?>
+                                        <meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="InStock" />
+                                    <?php else: ?>
+                                        <meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="OutOfStock" />
+                                        <div style="float:right"><p class="availability out-of-stock"><span>not for individual sale<?php //echo $this->__('Out of stock')           ?></span></p></div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <?php
+                    $i++;
+                endforeach;
+                ?>
+            </ol>
+            <script type="text/javascript">decorateList('products-list', 'none-recursive')
+                var clicked = true;
+                function setLocationfx(url) {
+                    if (clicked) {
+                        window.location.href = url;
+                        clicked = false;
+                    }
+                }
+            </script>
+
+        <?php endif; ?>
+
+        <div class="toolbar-bottom">
+            <?php echo $this->getToolbarHtml() ?>
+        </div>
+        <div class="wishlistsuccess">
+        <ul class="messages"><li class="success-msg"><ul><li><span><strong class="witem"></strong> Click <a class="closesuccess" href="javascript:void(0);">here</a> to continue shopping.</span></li></ul></li></ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            function fixheight() {
+                $(this).find('.prddes:before').height('100%');
+                if ($(window).width() < 768) {
+                    $('.products-list .item').each(function (index) {
+                        $(this).find('.prddes').removeClass('prddes49');
+                        $(this).find('.prddes').removeClass('prddes67');
+                        $(this).find('.prddes').removeClass('prddes84');
+                        $(this).find('.prddes').removeClass('prddes102');
+                        var desh = $(this).find('.prddes').innerHeight();
+                        if (desh > 102)
+                            $(this).find('.prddes').addClass('prddes120');
+                        else if (desh > 84)
+                            $(this).find('.prddes').addClass('prddes102');
+                        else if (desh > 67)
+                            $(this).find('.prddes').addClass('prddes84');
+                        else if (desh > 49)
+                            $(this).find('.prddes').addClass('prddes67');
+                        else if (desh > 32)
+                            $(this).find('.prddes').addClass('prddes49');
+                    });
+                }
+            }
+            var TO = false;
+            $(window).resize(function () {
+                if (TO !== false)
+                    clearTimeout(TO);
+                TO = setTimeout(fixheight, 200); //200 is time in miliseconds
+            });
+            fixheight();
+        });
+    </script>
+<?php endif; ?>
+<script type="text/javascript">
+(function($){
+    $.fn.extend({
+        center: function () {
+            return this.each(function() {
+                var top = ($(window).height() - $(this).outerHeight()) / 2;
+              //  var left = ($(window).width() - $(this).outerWidth()) / 2;
+                $(this).css({transform: 'translate(0,0)', margin:0, top: (top > 0 ? top : 0)+'px'});
+            });
+        }
+    }); 
+})(jQuery);
+    
+</script>
+

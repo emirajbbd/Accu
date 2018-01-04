@@ -1,0 +1,361 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+$session = Mage::getSingleton("core/session",  array("name"=>"frontend"));
+$hideprice = $session->getData("hideprice");
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<script type="text/javascript">
+   // var optionsPrice = new Product.OptionsPrice(<?php //echo $this->getJsonConfig() ?>);
+</script>
+<meta property="og:site_name" content="AccuStandard" />
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="product-view" itemscope itemtype="http://schema.org/Product">
+	
+    <div class="product-essential">
+   <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+
+        <div class="product-shop  <?php /*$acc_tmp = $_product->getImage(); if (!empty ($acc_tmp) and $acc_tmp != 'no_selection'): ?>col-xs-12 col-sm-7 col-md-7<?php endif;*/ ?> no-padding">
+		<meta itemprop="url" content="<?php echo $_product->getProductUrl() ?>" />
+            <div class="product-name">
+                <h1 itemprop="name"><?php  if($_product->getIsnew()){ ?><strong class="new">NEW</strong><?php } ?><span itemprop="name"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></span></h1>
+            </div>
+			<div class="formtopinfo">
+				<div class="inforow">
+					<div class="col-xs-5 col-sm-4 col-md-4 no-left-padding lbltag"> <span class="label-destop">Catalog Number</span><span class="label-mobile">Cat. #</span></div><div class="col-xs-7 col-sm-8 col-md-8 lbdes" itemprop="productID"><?php echo $_helper->productAttribute($_product, $_product->getSku() , 'sku'); ?></div>
+					<div class="clear"></div>
+				</div>
+				<?php if($_product->getMatrix()!='') :?>
+				<div class="inforow">
+				<div class="col-xs-5 col-sm-4 col-md-4 no-left-padding lbltag"><span class="label-destop">Matrix</span><span class="label-mobile">Matrix</span></div><div class="col-xs-7 col-sm-8 col-md-8 lbdes" itemprop="description"><?php echo $_product->getMatrix(); ?></div>
+				<div class="clear"></div>
+				</div>
+				<?php endif; ?>
+				<?php if($_product->getAnalyte_count()!='') :?>
+				<div class="inforow nocom">
+				<div class="col-xs-5 col-sm-4 col-md-4 no-left-padding lbltag"><span class="label-destop">Number of Components</span><span class="label-mobile">Comps</span></div><div class="col-xs-7 col-sm-8 col-md-8 lbdes"><?php echo $_product->getAnalyte_count (); ?></div>
+				<div class="clear"></div>
+				</div>
+				<?php endif; ?>
+				<?php if($_product->getSales_unit_size()!='') :?>
+				<div class="inforow" >
+				<div class="col-xs-5 col-sm-4 col-md-4 no-left-padding lbltag"><span class="label-destop">Unit</span><span class="label-mobile">Unit</span></div><div class="col-xs-7 col-sm-8 col-md-8 lbdes" ><?php echo $_product->getSales_unit_size(); ?></div><div class="clear"></div>
+				</div>
+				<?php endif; ?>
+				<?php if($_product->isSaleable()): 
+				$mystring = $_product->getSales_unit_size();
+$findme   = 'mg';
+$pos = strpos($mystring, $findme);
+
+
+if ($pos === false) {
+    $unt="LTR";
+} else {
+    $unt="GRM";
+}
+				?>
+				<div class="inforow" <?php if ($hideprice==1): ?> style="display:none"<?php endif; ?> itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+				<div itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
+				<div class="col-xs-5 col-sm-4 col-md-4 no-left-padding lbltag" <?php if($_product->getSales_unit_size()!='') :?>itemprop="referenceQuantity" itemscope itemtype="http://schema.org/QuantitativeValue"<?php endif; ?>><span class="label-destop">Price(USD)</span><span class="label-mobile">Price</span><?php if($_product->getSales_unit_size()!='') :?><meta itemprop="value" content="<?php echo intval($_product->getSales_unit_size())/1000; ?>"><meta itemprop="unitCode" content="<?php echo $unt;?>"><?php endif; ?></div><div class="col-xs-7 col-sm-8 col-md-8 lbdes">
+				
+				<meta itemprop="priceCurrency" content="USD" />
+				<?php echo $this->getPriceHtml($_product, true); ?><?php //echo Mage::helper('core')->currency($_product->getPrice()) ?>
+				
+          		
+				</div>
+				<div class="clear"></div>
+				</div>
+				<meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
+				<meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="InStock" />
+				</div>
+				<?php endif; ?>
+				<div class="clear"></div>
+			</div>
+			<div class="cartholder">
+				<div class="col-xs-12 col-sm-12 col-md-4 emptycartbox">&nbsp;</div>
+				<div class="col-xs-12 col-sm-12 col-md-8 crtinner">
+				<?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
+            <?php echo $this->getChildHtml('alert_urls') ?>
+            <?php //echo $this->getChildHtml('product_type_data') ?>
+            
+            <?php echo $this->getChildHtml('extrahint') ?>
+
+            <?php if (!$this->hasOptions()):?>
+                <div class="add-to-box">
+                    <?php if($_product->isSaleable()): ?>
+                    <?php if($hideprice !=1): ?>
+                        <?php echo $this->getChildHtml('addtocart') ?>
+                        <?php endif; ?>
+                        <?php if($hideprice ==1): ?>
+<a style="float:left; max-width:300px" class="showdistributorurl distributor-location-btn" title="Click here to find the AccuStandard distributor for your location." href="<?php echo $this->getUrl(); ?>distributors"><span>&nbsp;</span></a>
+<?php endif; ?>
+                        <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                            <span class="or">&nbsp;&nbsp;</span>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <div class="productselink">
+					<?php echo $this->getChildHtml('addto') ?>
+            <?php if ($this->canEmailToFriend()): ?>
+                <p class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><span class="label-destop"><?php echo $this->__('Email to Colleague') ?></span> <span class="label-mobile"> <?php echo $this->__('Email') ?></span></a></p></div>
+            <?php endif; ?>
+                </div>
+                <?php echo $this->getChildHtml('extra_buttons') ?>
+            <?php elseif (!$_product->isSaleable()): ?>
+                <div class="add-to-box">
+                    <?php echo $this->getChildHtml('addto') ?>
+                </div>
+            <?php endif; ?>
+				
+				</div>
+				<div class="clear"></div>
+			</div>
+
+            
+
+            <?php /*if ($_product->getShortDescription()!=''):?>
+                <div class="short-description">
+                    <div class="std"><?php //echo $_product->getShortDescription();//$accustandard_tmp = $_helper->productAttribute($_product, $_product->_data['pack_availability'], 'pack_availability'); if (!empty ($accustandard_tmp)) echo $accustandard_tmp . "</br >\n</br >\n"; require_once (getcwd().'/downloads.php'); ?></div>
+                </div>
+            <?php endif;*/?>
+
+            <?php echo $this->getChildHtml('other');?>
+
+            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+            <?php endif;?>
+
+        </div>
+
+        <?php /*$acc_tmp = $_product->getImage(); if (!empty ($acc_tmp) and $acc_tmp != 'no_selection'): ?>
+        <div class="product-img-box col-xs-12 col-sm-5 col-md-5 no-padding">
+            <?php echo $this->getChildHtml('media'); ?>
+        </div>
+        <?php endif;*/?>
+
+        <div class="clearer"></div>
+        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+        <?php endif;?>
+        </form>
+    </div>
+
+    <div class="product-collateral" style="background:none;">
+<?php foreach ($this->getChildGroup('detailed_info', 'getChildHtml') as $alias => $html):?>
+        <div class="box-collateral <?php echo "box-{$alias}"?>">
+            <?php if ($title = $this->getChildData($alias, 'title')):?>
+            <h2 style="color:black;"><?php echo $this->escapeHtml($title); ?></h2>
+            <?php endif;?>
+            <?php echo $html; ?>
+        </div>
+<?php endforeach;?>
+        <?php echo $this->getChildHtml('upsell_products') ?>
+        <?php echo $this->getChildHtml('product_additional_data') ?>
+    </div>
+    
+ 
+<div id="mobilecartholder">
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form_2"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>> 
+ <?php if (!$this->hasOptions()):?>
+                <div class="add-to-box">
+                    <?php if($_product->isSaleable()): ?>
+                    <?php if($hideprice !=1): ?>
+                        <?php //echo $this->getChildHtml('addtocart') ?>
+                            <?php $buttonTitle = $this->__('Add to Cart'); ?>
+                            <?php if($_product->isSaleable()): ?>
+                                <div class="add-to-cart">
+                                    <?php if(!$_product->isGrouped()): ?>
+                                    <!--<label for="qty"><?php //echo $this->__('Qty:') ?></label>-->
+                                    <div class="qnttinput">
+                                    <input type="text" name="qty" id="qty_bottom" maxlength="12" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+                                    <input type="button" class="qty-increase" onclick="var qty_el_bottom = document.getElementById('qty_bottom'); var qty_bottom = qty_el_bottom.value; if( !isNaN( qty_bottom )) qty_el_bottom.value++;return false;">
+                                    <input type="button" class="qty-decrease" onclick="var qty_el_bottom = document.getElementById('qty_bottom'); var qty_bottom = qty_el_bottom.value; if( !isNaN( qty_bottom ) && qty_bottom > <?php echo $this->getProductDefaultQty() * 1 ?> ) qty_el_bottom.value--;return false;">
+                                    </div>
+                                    <?php endif; ?>
+                                    <button type="button" id="submit2" data-from="product_addtocart_form_2" title="<?php echo $buttonTitle ?>" class="button button--ujarak btn-cart" onclick="productAddToCartForm(this)"><span>
+                                    <span class="addtocarttext label-destop"><?php echo $buttonTitle ?></span>
+                                    <span class="addtocarttext label-mobile">Add</span>
+                                    <span id='ajax_loader'><span class="rotating glyphicon glyphicon-refresh"></span></span>
+                                    </span></button>
+                                    <?php //echo $this->getChildHtml('', true, true) ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <?php if($hideprice ==1): ?>
+<a style="float:left; max-width:300px" class="showdistributorurl distributor-location-btn" title="Click here to find the AccuStandard distributor for your location." href="<?php echo $this->getUrl(); ?>distributors"><span>&nbsp;</span></a>
+<?php endif; ?>
+                        
+                    <?php endif; ?>
+                   
+               
+            <?php elseif (!$_product->isSaleable()): ?>
+                <div class="add-to-box">
+                    <?php echo $this->getChildHtml('addto') ?>
+                </div>
+            <?php endif; ?>
+
+
+</div>
+    </form>
+</div>
+
+
+  <script type="text/javascript">
+  jQuery(window).resize(function() {
+  //moveAddToCart();
+  });
+  jQuery( window ).load(function() {
+  //moveAddToCart();
+});
+function moveAddToCart (){
+var responsive_viewport = jQuery(window).width();
+   //console.log(responsive_viewport);
+   if (responsive_viewport < 768) {
+      //var middle_div = jQuery('.cartholder').clone().remove();
+      //jQuery("#mobilecartholder").html(middle_div);
+      jQuery('.cartholder').appendTo('#mobilecartholder');
+   }else {
+   	jQuery('#mobilecartholder .cartholder').insertAfter('.formtopinfo');
+   }	
+}        		
+        	</script>
+    <script type="text/javascript">
+    //<![CDATA[
+        //var productAddToCartForm = new VarienForm('product_addtocart_form');
+        //var productAddToCartForm2 = new VarienForm('product_addtocart_form_2');
+         function productAddToCartForm(elem) {
+
+              //var productAddToCartForm = new VarienForm('product_addtocart_form_2');
+              
+             var id = jQuery(elem).attr("data-from");
+             var button = jQuery(elem).attr("id");
+
+            formsubmit(id,button);
+        }
+        function formsubmit(id,button){
+            var productAddToCart = new VarienForm(id);
+             //console.log(productAddToCartFormmm);
+        
+           
+            //console.log('dfe');
+            //return false;
+            if (productAddToCart.validator.validate()) {
+                var form = productAddToCart.form;
+                var oldUrl = form.action;
+                var url = form.url;
+                 var button = button;
+
+                if (url) {
+                   form.action = url;
+                }
+                var e = null;
+				if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+				 if(!url){
+                    url = jQuery('#'+id).attr('action');
+                }
+				if(!jQuery('body').hasClass('checkout-cart-configure')){
+				url = url.replace("checkout/cart","ajax/index"); // New Code
+                var data = jQuery('#'+id).serialize();
+                data += '&isAjax=1';  
+				jQuery('.product-view #'+id+' .btn-cart').addClass('wait');
+               // jQuery('#ajax_loader').show();
+				
+                try {
+                    jQuery.ajax({
+                          url: url,
+                          dataType: 'json',
+                          type : 'post',
+                          data: data,
+                          success: function(data){
+                               // alert(data.status + ": " + data.message);
+							    if(jQuery('.toplinksitems .block-cart')){
+                                    jQuery('.toplinksitems .block-cart').replaceWith(data.sidebar);
+                                }
+								//console.log(data.toplink);
+                                if(jQuery('.toplinksitems .links')){
+                                    jQuery('.toplinksitems .links').replaceWith(data.toplink);
+                                }
+								jQuery('.toplinksitems .ajaxcart .message').show();
+								//jQuery('#ajax_loader').hide();
+								jQuery('.product-view .btn-cart').removeClass('wait');
+								if(jQuery('body').hasClass('fixed-menu')){
+									jQuery('html, body').animate({scrollTop: jQuery(".toplinksitems").offset().top  }, 1000);
+								}
+								jQuery('.toplinksitems .block-cart').addClass('slidedown');
+								setTimeout(function() {jQuery('.toplinksitems .ajaxcart .message').fadeOut('slow'); }, 5000);
+								//jQuery('.top_link .block-cart').slideToggle('slow');
+								if (button && button != 'undefined') {
+                    button.disabled = false;
+                }
+                          }
+                    });
+                } catch (e) {
+                }}else{
+                try {
+                    productAddToCart.form.submit();
+                } catch (e) {
+                }
+				}
+                productAddToCart.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+               /* if (button && button != 'undefined') {
+                    button.disabled = true;
+                }*/
+            }
+        }
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+</div>

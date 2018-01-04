@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Harriswebworks_Newproducts extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category       Harriswebworks
+ * @package        Harriswebworks_Newproducts
+ * @copyright      Copyright (c) 2017
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<config>
+    <modules>
+        <Harriswebworks_Newproducts>
+            <version>1.0.0</version>
+        </Harriswebworks_Newproducts>
+    </modules>
+    <global>
+        <blocks>
+            <harriswebworks_newproducts>
+                <class>Harriswebworks_Newproducts_Block</class>
+            </harriswebworks_newproducts>
+        </blocks>
+        <helpers>
+            <harriswebworks_newproducts>
+                <class>Harriswebworks_Newproducts_Helper</class>
+            </harriswebworks_newproducts>
+        </helpers>
+        <models>
+            <harriswebworks_newproducts>
+                <class>Harriswebworks_Newproducts_Model</class>
+            </harriswebworks_newproducts>
+        </models>
+        <events>
+            <controller_front_init_routers>
+                <observers>
+                    <harriswebworks_newproducts>
+                        <class>Harriswebworks_Newproducts_Controller_Router</class>
+                        <method>initControllerNewproducts</method>
+                    </harriswebworks_newproducts>
+                </observers>
+            </controller_front_init_routers>
+        </events>
+    </global>
+    <frontend>
+        <routers>
+            <harriswebworks_newproducts>
+                <use>standard</use>
+                <args>
+                    <module>Harriswebworks_Newproducts</module>
+                    <frontName>newproducts</frontName>
+                </args>
+            </harriswebworks_newproducts>
+        </routers>
+        <layout>
+            <updates>
+                <harriswebworks_newproducts>
+                    <file>harriswebworks_newproducts.xml</file>
+                </harriswebworks_newproducts>
+            </updates>
+        </layout>
+    </frontend>
+    <default>
+        <harriswebworks_newproducts>
+            <newproduct>
+                <breadcrumbs>1</breadcrumbs>
+                <url_rewrite_list>newproducts/index</url_rewrite_list>
+                <meta_title>New Products</meta_title>
+            </newproduct>
+        </harriswebworks_newproducts>
+    </default>
+</config>

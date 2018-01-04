@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Log
+ * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Mage_Log>
+            <version>1.6.1.1</version>
+        </Mage_Log>
+    </modules>
+    <global>
+        <ignoredModules>
+            <entities>
+                <install/>
+                <adminhtml/>
+                <admin/>
+            </entities>
+        </ignoredModules>
+        <ignore_user_agents>
+            <google1>Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)</google1>
+            <google2>Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</google2>
+            <google3>Googlebot/2.1 (+http://www.googlebot.com/bot.html)</google3>
+			<baidu>Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)</baidu>
+			<bing>Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)</bing>
+			<megaindex>Mozilla/5.0 (compatible; MegaIndex.ru/2.0; +http://megaindex.com/crawler)</megaindex>
+			<ahrefs>Mozilla/5.0 (compatible; AhrefsBot/5.2; +http://ahrefs.com/robot/)</ahrefs>
+			<semrush>Mozilla/5.0 (compatible; SemrushBot/1.2~bl; +http://www.semrush.com/bot.html)</semrush>
+			<other1>Mozilla/5.0 (compatible; spbot/5.0.3; +http://OpenLinkProfiler.org/bot )</other1>
+			<other2>Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)</other2>
+			<other3>Mozilla/5.0 (compatible; Cliqzbot/2.0; +http://cliqz.com/company/cliqzbot)</other3>
+			<other4>Mozilla/5.0 (compatible; coccocbot-web/1.0; +http://help.coccoc.com/searchengine)</other4>
+			<other5>Mozilla/5.0 (compatible; linkdexbot/2.2; +http://www.linkdex.com/bots/)</other5>
+			<other6>Mozilla/5.0 (compatible; Yeti/1.1; +http://naver.me/bot)</other6>
+			<other7>Mozilla/5.0 (compatible; SeznamBot/3.2; +http://napoveda.seznam.cz/en/seznambot-intro/)</other7>
+			<other8>Mozilla/5.0 (compatible; SMTBot/1.0; +http://www.similartech.com/smtbot)</other8>
+			<other9>Mozilla/5.0 (compatible; Gowikibot/1.0; +http://www.gowikibot.com)</other9>
+			<other10>Mozilla/5.0 (compatible; Daum/4.1; +http://cs.daum.net/faq/15/4118.html?faqId=28966)</other10>
+			<other11>Mozilla/5.0 (compatible; Linux x86_64; Mail.RU_Bot/2.0; +http://go.mail.ru/help/robots)</other11>
+			<other12>Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html</other12>
+			<other13>Mozilla/5.0 (compatible; Findxbot/1.0; +http://www.findxbot.com)</other13>
+			<other14>Mozilla/5.0 (compatible; special_archiver/3.1.1 +http://www.archive.org/details/archive.org_bot)</other14>
+			<other15>Mozilla/5.0 (compatible; DuckDuckGo-Favicons-Bot/1.0; +http://duckduckgo.com)</other15>
+			<other16>Mozilla/5.0 (compatible; GoogleDocs; apps-spreadsheets; +http://docs.google.com)</other16>
+			<other17>Mozilla/5.0 (compatible; SurdotlyBot/1.0; +http://sur.ly/bot.html)</other17>
+			<other18>Mozilla/5.0 (compatible; NTENTbot; +http://www.ntent.com/ntentbot)</other18>
+			<other19>Mozilla/5.0 (compatible; Exabot/3.0; +http://www.exabot.com/go/robot)</other19>
+			<other20>Mozilla/5.0 (compatible; Uptimebot/1.0; +http://www.uptime.com/uptimebot)</other20>
+			<other21>Mozilla/5.0 (compatible; SemrushBot-BA; +http://www.semrush.com/bot.html)</other21>
+			<other22>Mozilla/5.0 (compatible; GrapeshotCrawler/2.0; +http://www.grapeshot.co.uk/crawler.php)</other22>
+			<other23>Mozilla/5.0 (compatible; RukiCrawler/1.0; +http://ruki.rezko.net)</other23>
+			<other24>Mozilla/5.0 (compatible; Linux x86_64; Mail.RU_Bot/Robots/2.0; +http://go.mail.ru/help/robots)</other24>
+			<other25>Mozilla/5.0 (compatible; Prlog/1.0; +http://prlog.ru/)</other25>
+			<other26>Mozilla/5.0 (compatible; Gluten Free Crawler/1.0; +http://glutenfreepleasure.com/)</other26>
+			<other27>Mozilla/5.0 (compatible; IDBot/1.1; +http://www.id-search.xyz/bot.html)</other27>
+			<other28>Mozilla/5.0 (compatible; archive.org_bot +http://www.archive.org/details/archive.org_bot)</other28>
+			<other29>Mozilla/5.0 (compatible; XoviBot/2.0; +http://www.xovibot.net/)</other29>
+			<other30>Mozilla/5.0 (compatible; hypestat/1.0; +http://www.hypestat.com/bot)</other30>
+			<other31>Mozilla/5.0 (compatible; Embedly/0.2; +http://support.embed.ly/)</other31>
+			<other32>Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)</other32>
+			<other33>Mozilla/5.0 (compatible; SemrushBot-SI/0.97; +http://www.semrush.com/bot.html)</other33>
+			<other34>Mozilla/5.0 (compatible; YandexMetrika/2.0; +http://yandex.com/bots)</other34>
+        </ignore_user_agents>
+        <helpers>
+            <log>
+                <class>Mage_Log_Helper</class>
+            </log>
+        </helpers>
+        <models>
+            <log>
+                <class>Mage_Log_Model</class>
+                <resourceModel>log_resource</resourceModel>
+            </log>
+            <log_resource>
+                <class>Mage_Log_Model_Resource</class>
+                <deprecatedNode>log_mysql4</deprecatedNode>
+                <entities>
+                    <customer>
+                        <table>log_customer</table>
+                    </customer>
+                    <visitor>
+                        <table>log_visitor</table>
+                    </visitor>
+                    <visitor_info>
+                        <table>log_visitor_info</table>
+                    </visitor_info>
+                    <url_table>
+                        <table>log_url</table>
+                    </url_table>
+                    <url_info_table>
+                        <table>log_url_info</table>
+                    </url_info_table>
+                    <summary_table>
+                        <table>log_summary</table>
+                    </summary_table>
+                    <summary_type_table>
+                        <table>log_summary_type</table>
+                    </summary_type_table>
+                    <quote_table>
+                        <table>log_quote</table>
+                    </quote_table>
+                    <visitor_online>
+                        <table>log_visitor_online</table>
+                    </visitor_online>
+                </entities>
+            </log_resource>
+        </models>
+        <resources>
+            <log_setup>
+                <setup>
+                    <module>Mage_Log</module>
+                </setup>
+            </log_setup>
+        </resources>
+        <template>
+            <email>
+                <system_log_error_email_template translate="label" module="log">
+                    <label>Log cleanup Warnings</label>
+                    <file>log_clean_warning.html</file>
+                    <type>text</type>
+                </system_log_error_email_template>
+            </email>
+        </template>
+    </global>
+    <frontend>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <log>
+                        <class>log/visitor</class>
+                        <method>initByRequest</method>
+                    </log>
+                </observers>
+            </controller_action_predispatch>
+            <controller_action_postdispatch>
+                <observers>
+                    <log>
+                        <class>log/visitor</class>
+                        <method>saveByRequest</method>
+                    </log>
+                </observers>
+            </controller_action_postdispatch>
+            <customer_login>
+                <observers>
+                    <log>
+                        <class>log/visitor</class>
+                        <method>bindCustomerLogin</method>
+                    </log>
+                </observers>
+            </customer_login>
+            <customer_logout>
+                <observers>
+                    <log>
+                        <class>log/visitor</class>
+                        <method>bindCustomerLogout</method>
+                    </log>
+                </observers>
+            </customer_logout>
+            <sales_quote_save_after>
+                <observers>
+                    <log>
+                        <class>log/visitor</class>
+                        <method>bindQuoteCreate</method>
+                    </log>
+                </observers>
+            </sales_quote_save_after>
+            <checkout_quote_destroy>
+                <observers>
+                    <log>
+                        <class>log/visitor</class>
+                        <method>bindQuoteDestroy</method>
+                    </log>
+                </observers>
+            </checkout_quote_destroy>
+        </events>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mage_Log>
+                    <files>
+                        <default>Mage_Log.csv</default>
+                    </files>
+                </Mage_Log>
+            </modules>
+        </translate>
+    </adminhtml>
+    <default>
+        <log>
+            <visitor>
+                <online_update_frequency>60</online_update_frequency>
+            </visitor>
+        </log>
+        <system>
+            <log>
+                <enable_log>2</enable_log>
+                <clean_after_day>180</clean_after_day>
+                <enabled>1</enabled>
+                <time/>
+                <frequency>D</frequency>
+                <error_email/>
+                <error_email_identity>general</error_email_identity>
+                <error_email_template>system_log_error_email_template</error_email_template>
+            </log>
+        </system>
+    </default>
+    <crontab>
+        <jobs>
+            <log_clean>
+                <run>
+                    <model>log/cron::logClean</model>
+                </run>
+            </log_clean>
+        </jobs>
+    </crontab>
+</config>

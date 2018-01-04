@@ -1,0 +1,39 @@
+<?php
+/**
+ * Hww_SalesTools extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category       Hww
+ * @package        Hww_SalesTools
+ * @copyright      Copyright (c) 2017
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ */
+/**
+ * Sales Tools Category view template
+ *
+ * @category    Hww
+ * @package     Hww_SalesTools
+ * @author      Ultimate Module Creator
+ */
+?>
+<?php $_toolscategory = $this->getCurrentToolscategory();?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title toolscategory-title">
+    <h1><?php echo $_toolscategory->getCatname(); ?></h1>
+    <div class="salescat-link">
+        <a href="<?php echo $this->getUrl() . 'distributorportal'; ?>"><?php echo $this->__("Back to Distributor Portal"); ?></a>
+    </div>
+</div>
+<div class="toolscategory-view">
+    <div class="toolscategory-catname">
+        <?php /*echo Mage::helper('hww_salestools')->__('Distributor Portal');?>:<?php echo $_toolscategory->getCatname();*/?>
+
+    </div>
+
+</div>

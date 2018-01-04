@@ -1,0 +1,220 @@
+<?php
+/**
+ * Hww_SalesTools extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category       Hww
+ * @package        Hww_SalesTools
+ * @copyright      Copyright (c) 2017
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ */
+/**
+ * Sales Tools Category list template
+ *
+ * @category    Hww
+ * @package     Hww_SalesTools
+ * @author      Ultimate Module Creator
+ */
+$customerData = Mage::getSingleton('customer/session')->getCustomer();
+$distributor_financial = $customerData->getData('distributor_financial');
+$accustandard_cust_no = $customerData->getData('accustandard_cust_no');
+$folder = $this->getRequest()->getParam('foldername');
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php ?>
+<?php 
+$_financialtool = Mage::registry('current_financialtool');?>
+<div class="page-title toolscategory-title">
+    <h1><?php echo $_financialtool->getFinancialtoolstitle();?><?php //echo str_replace('_', ' ', $folder) ?></h1>
+    <div class="salescat-link"><a href="<?php echo Mage::getBaseUrl(); ?>distributorportal"><?php echo $this->__("Back to Distributor Portal"); ?></a></div>
+</div>
+<div class="userinfoblock" style="float:right; text-align:right;margin-right: 5px;margin-bottom: 5px;margin-top: -10px;">
+    <p style="margin:0">
+        <span style="display:block; "><?php echo $customerData->getName(); ?></span>
+        <span style="display:block;">Acct# <?php echo $customerData->getAccustandardCustNo(); ?></span>
+    </p>
+</div>
+<div class="distables " style="clear:both;">
+    <?php
+// echo '<pre style="display:none">';
+    function scan_dir($dir, $cust_no) {
+        // $ignored = array('.', '..', '.svn', '.htaccess');
+        $allow = array('pdf', 'tab', 'csv', 'xl', 'xls');
+        $files = array();
+        foreach (scandir($dir) as $file) {
+            $ext = substr($file, strrpos($file, '.') + 1);
+            if (!in_array($ext, $allow))
+                continue;
+            $pos = strpos($file, $cust_no);
+            if ($pos === false) {
+                continue;
+            } else {
+                //echo strlen($cust_no);
+                $needle = '_';
+                $result = substr($file, 0, strpos($file, $needle));
+                if ($result == $cust_no)
+                    $files[filectime($dir . '/' . $file)] = $file;
+
+                //echo $stat['ctime'];
+            }
+        }
+       // echo '<pre>';
+        //print_r($files);
+        if (!empty($files))
+            krsort($files, SORT_NUMERIC);
+        // $files = array_keys($files);
+        return ($files) ? $files : false;
+    }
+
+    function FileSizeConvert($bytes) {
+        $bytes = floatval($bytes);
+        $arBytes = array(
+            0 => array(
+                "UNIT" => "TB",
+                "VALUE" => pow(1024, 4)
+            ),
+            1 => array(
+                "UNIT" => "GB",
+                "VALUE" => pow(1024, 3)
+            ),
+            2 => array(
+                "UNIT" => "MB",
+                "VALUE" => pow(1024, 2)
+            ),
+            3 => array(
+                "UNIT" => "KB",
+                "VALUE" => 1024
+            ),
+            4 => array(
+                "UNIT" => "B",
+                "VALUE" => 1
+            ),
+        );
+
+        foreach ($arBytes as $arItem) {
+            if ($bytes >= $arItem["VALUE"]) {
+                $result = $bytes / $arItem["VALUE"];
+                $result = str_replace(".", ".", strval(round($result, 2))) . " " . $arItem["UNIT"];
+                break;
+            }
+        }
+        return $result;
+    }
+	 $needle = $customerData->getId();
+	$filter_a = array('like'=>'a%');
+    $filter_b = array('like'=>'b%');
+		
+	/*$filelist = Mage::getResourceModel('hww_financialtools/financialfile_collection')
+		->addExpressionFieldToSelect("fileforall",'SUBSTRING(LOWER(SUBSTRING_INDEX({{uploadedfile}}, "/", -1)),1,5)',['uploadedfile'])
+		->addFieldToFilter('financialtool_id', $_financialtool->getId())
+		//->addFieldToFilter('uploadedfile', array('like' => $accustandard_cust_no.'%'))
+		->addFieldToFilter( array('uploadedfile', 'user_ids','fileforall'),
+							array(
+								array( 'like' => '%/'.$accustandard_cust_no.'%'),
+								array(array('like' => '%,'.$needle.',%'),
+									array('like' => '%,'.$needle), 
+									array('like' => $needle.',%')
+								),
+								array( 'NOT regexp' => '^[0-9]{5}$')
+							)
+						)
+		->setOrder('upposition', 'asc');*/
+		//echo $filelist->getSelect()->__toString();
+		$connection = Mage::getSingleton('core/resource')->getConnection('core_read');
+		 $sql        = "SELECT `main_table`.* FROM `hww_financialtools_financialfile` AS `main_table` WHERE (`financialtool_id` = '".$_financialtool->getId()."') AND ((`uploadedfile` LIKE '%/".$accustandard_cust_no."%') OR (((`user_ids` LIKE '%,".$needle.",%') OR (`user_ids` LIKE '%,".$needle."') OR (`user_ids` LIKE '".$needle.",%'))) OR (SUBSTRING(LOWER(SUBSTRING_INDEX(uploadedfile, '/', -1)),1,5) not REGEXP '^[0-9]{5}$')) ORDER BY upposition ASC";//exit;
+		//$filelist       = $connection->query($sql); 
+		
+//print_r($filelist);
+
+
+		//AND SUBSTRING(LOWER(SUBSTRING_INDEX(uploadedfile, '\\', -1)),1,1) BETWEEN '0' AND '9'    '^[0-9]{5}$'   'regexp'=>'^[0-9]{5}$'
+//"SUBSTRING_INDEX(uploadedfile, '\\', -1)"
+    $dir = getcwd() . '/distributorportals/financials/' ;
+   // $folderlist = scan_dir($dir, $accustandard_cust_no);
+//print_r($folderlist);
+//echo '</pre>';
+$filelist = $connection->fetchAll($sql);
+    $total_rows = count($filelist);
+//if ($filelist->fetchColumn() > 0) {
+ 	//$total_rows = $filelist->fetchColumn();
+    if ($distributor_financial && $accustandard_cust_no != "" && $total_rows > 0 /*!empty($filelist)*/) {
+        ?>
+        <div class="dis_financial tools-list-container category-tools no-padding col-xs-12 col-sm-12 col-md-12">
+
+            <div class="tablehead">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 ">Document Name</div>
+                    <div class="col-xs-6 col-sm-6 col-md-6  text-center">Download</div>
+                </div>
+            </div>
+            <div class="sttablecontent">
+                <?php
+                $i = 0;
+                foreach ($filelist as $file) {
+				 //  while ($file = $filelist->fetch()) {
+					   echo '<pre style="display:none">';
+					   print_r($file);
+					   echo '</pre>';//exit;
+                   // $filename = str_replace('_', ' ', str_replace($accustandard_cust_no, '', $file));
+                    //$urlpath = 'financial-tools/'.strtolower(str_replace('_','-',$folder));
+                    //$ext = substr($filename, strrpos($filename, '.') + 1);
+                    //$displayname = trim(str_replace($ext, '', $filename), '.');
+                    ?>
+                    <div class="tool-list-item container-fluid financialdoclist <?php if ($i % 2 != 0) echo 'odd'; ?>">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6 titlecon  detaillist_left">
+                                <h4><?php echo $file['document_title']; ?></h4>
+                                <p class="view"><a href="<?php echo $this->getUrl(); ?>distributorportals/financials<?php echo  $file['uploadedfile'] ; ?>" target="_blank"><?php echo $this->__("View"); ?></a></p>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6  detaillist_right stdlink">
+                                <a href="<?php echo $this->getUrl(); ?>download_pdf.php?file=/distributorportals/financials<?php echo  $file['uploadedfile'] . "&name=" . str_replace(' ', '_', trim(basename( $file['uploadedfile']))); ?>" >Download</a><br>
+                                <span><?php echo 'File Size:' . FileSizeConvert(filesize($dir  . $file['uploadedfile'])); ?></span>
+                                <span><?php echo 'File Type:' . (pathinfo($dir  . $file['uploadedfile'], PATHINFO_EXTENSION)); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    $i++;
+                }
+                ?>
+            </div>
+            <script type="text/javascript">
+                jQuery.noConflict();
+                jQuery(document).ready(function ($) {
+                    function fixheightsalestollsh() {
+                        var highest = null;
+                        var hi = 0;
+                        $('.sttablecontent .titlecon').css('min-height', 'auto');
+                        $(".sttablecontent .tool-list-item").each(function () {
+                            var h = $(this).innerHeight();
+                            if (h > hi) {
+                                hi = h;
+                                highest = $(this).innerHeight();
+                            }
+                            if ($(window).innerWidth() > 767) {
+                                $(this).find(".titlecon").css('min-height', h);
+                            }
+                        });
+                    }
+                    var TO = false;
+                    $(window).resize(function () {
+                        if (TO !== false)
+                            clearTimeout(TO);
+                        TO = setTimeout(fixheightsalestollsh, 200); //200 is time in miliseconds
+                    });
+                    fixheightsalestollsh();
+                });
+            </script> 
+        </div>
+    <?php }else { ?>
+        <div class="text-center alert alert-danger">
+            <p><strong><?php echo 'None available at this time.';//'There are no ' . $_financialtool->getFinancialtoolstitle() . ' at this time'; ?></strong></p>
+        </div>
+    <?php } ?>
+</div>

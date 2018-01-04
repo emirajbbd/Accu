@@ -1,0 +1,230 @@
+<?php
+/**
+ * Magento
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for Mage_Page_Block_Html
+ */
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $this->getLang() ?>">
+<head>
+	<?php echo $this->getChildHtml('head') ?>
+</head>
+
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('after_body_start') ?>
+<div class="wrapper"> <?php echo $this->getChildHtml('global_notices') ?>
+  <div class="page"> <?php echo $this->getChildHtml('header') ?>
+  
+    <?php if( Mage::getSingleton( 'customer/session' )->isLoggedIn() || $this->LogInRequired == 'false' ):?>
+        <div class="container">
+        <div class="main">
+        <?php echo $this->getLayout()->createBlock('core/template')->setTemplate('quickaddtocart/quickaddtocart.phtml')->toHtml();	?>
+        </div>
+        </div>
+		<?php endif;	?>
+	<div id="home-hero">
+     <?php $storeId = Mage::app()->getStore()->getStoreId();
+			if(Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/activate',$storeId)):
+				$anc_text = Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/button_text',$storeId);
+				if(Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/url_target',$storeId)!='')
+				$url_target = ' target="'.Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/url_target',$storeId).'"';
+				$url = '';
+				$key ='';
+				if(Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/url_type',$storeId)==1){
+					$key = Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/cms_page_id',$storeId);
+					$url =$this->getUrl($key);
+				}else if(Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/url_type',$storeId)==2){
+					$key = Mage::getStoreConfig('harriswebworks_storemaintenance/occasionalmessages/url_text',$storeId);
+					$findme   = 'accustandard.com/';
+					$pos = strpos($key, $findme);
+					if ($pos === false) {
+					   $url = $key;
+					} else {
+					   $url = $this->getBaseUrl('').$key;
+					}
+				}
+			 ?>
+             <div class="container clearfix occational_con">
+            <div class="occationalmgs"><a class="cutom_button cutom_button_effect" href="<?php echo $url; ?>"<?php echo $url_target;?>><span><?php echo $anc_text;?></span></a></div>
+            </div>
+            <style type="text/css">
+			#home-hero{padding-top:50px};
+			</style>
+            <?php endif; ?>
+		<div class="container clearfix">
+			<div class="mobile-hero view-mobile"></div>
+			<div class="caption">
+				<span class="year"></span>
+				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('hero-content')->toHtml() ?>
+			</div>
+			<ul class="clearfix">
+		    	<li class="flink link1"><a class="scroll" href="#new">New Products</a></li>
+		        <li class="flink link2"><a class="scroll"  href="#spotlight">Spotlights</a></li>
+		        <li class="flink link3"><a class="scroll" href="#literature">Literature</a></li>
+			</ul>
+			<p class="iso-button"><span>ISO</span> Guide 34, 17025 and 9001</p>
+		</div>
+       
+	</div>
+ 
+	<div id="home-products">
+		<div class="home-foreground1 view-desktop"></div>
+		<div class="home-foreground2 view-desktop"></div>
+		<div class="container clearfix">
+			<div id="new-products" class="new-products">
+				<h2><?php //$blocktitle = Mage::getModel('cms/block')->setStoreId(Mage::app()->getStore()->getId())->load('new-product')->getTitle();  echo $blocktitle; ?>New Products</h2>
+				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('new-product')->toHtml() ?>
+			</div>
+			
+			<div id="spotlight" class="spotlight">
+				<h2><?php //$blocktitle = Mage::getModel('cms/block')->setStoreId(Mage::app()->getStore()->getId())->load('spotlight')->getTitle(); echo $blocktitle;  ?>Spotlights</h2>
+				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('spotlight')->toHtml() ?>
+			</div>
+			
+			<a id="literature-link" class="literature-link" href="#literature">Literature</a>
+		</div>
+	</div>
+
+    
+    <div id="featured_literature">
+		<div id="literature" class="container clearfix">
+			<h2><?php $blocktitle = Mage::getModel('cms/block')->setStoreId(Mage::app()->getStore()->getId())->load('slider-tab')->getTitle();  echo $blocktitle; ?></h2>
+			<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('slider-tab')->toHtml() ?>
+		</div>
+	</div>
+
+	<?php echo $this->getChildHtml('footer') ?> <?php echo $this->getChildHtml('before_body_end') ?> 
+    
+    
+    </div>
+</div>
+<?php echo $this->getAbsoluteFooter() ?>
+
+<script type="text/javascript">
+jQuery.noConflict();
+jQuery(document).ready(function($){
+	if(getViewportWidth()>=768){
+		
+		jQuery('#home-products').parallax("50%", 0.3);
+		
+		jQuery(window).scroll(function() {
+			if( jQuery(this).scrollTop() > 280 ) {
+				jQuery("#new-products").addClass("active");
+			}
+			
+			if( jQuery(this).scrollTop() > 500 ) {
+				jQuery("#spotlight").addClass("active");
+			}
+			
+			/*
+			var top = $("#home-products").offset().top
+			if( jQuery(this).scrollTop() > top ) {
+				var backgroundTop = (jQuery(this).scrollTop() - top)/1.5;;
+				jQuery("#home-products .home-background1").css("top", backgroundTop + "px");
+			}
+			else {
+				jQuery("#home-products .home-background1").css("top", 0);
+			}
+			
+			var top2 = $("#featured_literature").offset().top;
+			if( jQuery(this).scrollTop() > top2  ) {
+				var backgroundBottom = (jQuery(this).scrollTop() - top2)/0.7;;
+				jQuery("#home-products .home-background2").css("bottom", "-" + backgroundBottom + "px");
+			}
+			else {
+				jQuery("#home-products .home-background2").css("bottom", 0);
+			}
+			*/
+		});
+
+	}
+
+
+	$(".flink a").click(function() {
+		var id= $(this).attr('href');
+		if(getViewportWidth()<768){
+			if(id == "#spotlight"){
+				$('html,body').animate({ scrollTop: $("#spotlight").offset().top  }, 500);
+			}else if(id == "#new"){
+				$('html,body').animate({ scrollTop: $("#home-products").offset().top }, 500);
+			}else{	
+				$('html,body').animate({scrollTop: $(id).offset().top }, 500);
+			}
+		}
+		else{
+			if(id == "#spotlight"){
+				$('html,body').animate({ scrollTop: $("#home-products").offset().top + 260  }, 500);
+			}else if(id == "#new"){
+				$('html,body').animate({ scrollTop: $("#home-products").offset().top - 65 }, 500);
+			}else{	
+				$('html, body').animate({scrollTop: $(id).offset().top - 65 }, 500);
+			}
+		}
+		return false;
+	});
+
+	$("#literature-link").click(function() {
+		var id = $(this).attr('href');
+		if(getViewportWidth()<768){
+			$('html,body').animate({scrollTop: $(id).offset().top }, 500);
+		}
+		else{
+			$('html, body').animate({scrollTop: $(id).offset().top - 65 }, 500);
+		}
+		return false;
+	});
+	FeaturedLiteratureCopy();	
+});
+function FeaturedLiteratureCopy() {
+if(getViewportWidth()<768){
+			 jQuery('.featuredinner .slidegroup li').each(function(){
+				var dataid = jQuery(this).find('a').attr('data-content');
+				//console.log(dataid);
+				 var links = jQuery('#'+dataid+' .viewDownloadLink ').html();
+				 //console.log(links);
+				 jQuery(this).find('a').after('<p class="viewDownloadLink">'+links +'</p>')
+
+    });
+		}	
+}
+function getViewportWidth() {
+    if(window.undefined != window.innerWidth){
+        return window.innerWidth; 
+    }
+    if("CSS1Compat" == document.compatMode) {
+        return document.documentElement.clientWidth; 
+    }
+    if(document.body){
+        return document.body.clientWidth; 
+    }
+    return window.undefined
+}
+
+</script>
+
+</body>
+</html>

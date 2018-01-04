@@ -1,0 +1,16 @@
+<?php
+$customer = Mage::getSingleton('customer/session')->getCustomer();
+if($customer->getName()!=''){
+?>
+<div class="userinfoblock" style="float: right; text-align: right; margin-right: 5px; margin-bottom: 5px; margin-top: -10px;">
+  <p style="margin:0">
+    <?php if ($customer->getName()!='') { ?>
+    <span style="display:block; "><?php echo $customer->getName(); ?></span>
+    <?php } ?>
+    <?php if ($customer->getAccustandardCustNo()!='') { ?>
+    <span style="display:block;">Acct# <?php echo $customer->getAccustandardCustNo(); ?></span>
+    <?php } ?>
+  </p>
+</div>
+<div class="clear"></div>
+<?php } ?>
