@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Harriswebworks_Distributorcountry extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category       Harriswebworks
+ * @package        Harriswebworks_Distributorcountry
+ * @copyright      Copyright (c) 2017
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <harriswebworks_distributorcountry translate="title" module="harriswebworks_distributorcountry">
+                                        <title>Distributorcountry</title>
+                                    </harriswebworks_distributorcountry>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <harriswebworks_distributorcountry translate="title" module="harriswebworks_distributorcountry">
+                        <title>Distributor Countries</title>
+                        <children>
+                            <country translate="title" module="harriswebworks_distributorcountry">
+                                <title>Distributor Countries</title>
+                                <sort_order>0</sort_order>
+                            </country>
+                        </children>
+                    </harriswebworks_distributorcountry>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <hww_salestools>
+            <children>
+                <country translate="title" module="harriswebworks_distributorcountry">
+                    <title>Distributor Countries</title>
+                    <action>adminhtml/distributorcountry_country</action>
+                    <sort_order>50</sort_order>
+                </country>
+            </children>
+        </hww_salestools>
+    </menu>
+</config>

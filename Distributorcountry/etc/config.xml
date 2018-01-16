@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Harriswebworks_Distributorcountry extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category       Harriswebworks
+ * @package        Harriswebworks_Distributorcountry
+ * @copyright      Copyright (c) 2017
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<config>
+    <modules>
+        <Harriswebworks_Distributorcountry>
+            <version>1.0.0</version>
+        </Harriswebworks_Distributorcountry>
+    </modules>
+    <global>
+        <resources>
+            <harriswebworks_distributorcountry_setup>
+                <setup>
+                    <module>Harriswebworks_Distributorcountry</module>
+                    <class>Harriswebworks_Distributorcountry_Model_Resource_Setup</class>
+                </setup>
+            </harriswebworks_distributorcountry_setup>
+        </resources>
+        <blocks>
+            <harriswebworks_distributorcountry>
+                <class>Harriswebworks_Distributorcountry_Block</class>
+            </harriswebworks_distributorcountry>
+        </blocks>
+        <helpers>
+            <harriswebworks_distributorcountry>
+                <class>Harriswebworks_Distributorcountry_Helper</class>
+            </harriswebworks_distributorcountry>
+        </helpers>
+        <models>
+            <harriswebworks_distributorcountry>
+                <class>Harriswebworks_Distributorcountry_Model</class>
+                <resourceModel>harriswebworks_distributorcountry_resource</resourceModel>
+            </harriswebworks_distributorcountry>
+            <harriswebworks_distributorcountry_resource>
+                <class>Harriswebworks_Distributorcountry_Model_Resource</class>
+                <entities>
+                    <country>
+                        <table>harriswebworks_distributorcountry_country</table>
+                    </country>
+                </entities>
+            </harriswebworks_distributorcountry_resource>
+        </models>
+		<events>
+		<controller_front_init_before>
+           <observers>
+             <harriswebworks_distributorcountry_observer>
+               <type>singleton</type>
+               <class>Harriswebworks_Distributorcountry_Model_Observer</class>
+               <method>checkIfDistributorcountry</method>
+             </harriswebworks_distributorcountry_observer>
+           </observers>
+         </controller_front_init_before>
+		<catalog_product_get_final_price>
+           <observers>
+             <hideprice_catalog_price_observer>
+               <type>singleton</type>
+               <class>Harriswebworks_Distributorcountry_Model_Observer</class>
+               <method>hidePrice</method>
+             </hideprice_catalog_price_observer>
+           </observers>
+         </catalog_product_get_final_price>
+		 <catalog_product_collection_load_after>
+		  <observers>
+			<hprice_catalog_price_observer>
+			  <type>singleton</type>
+			  <class>Harriswebworks_Distributorcountry_Model_Observer</class>
+			  <method>hidePriceCatalog</method>
+			</hprice_catalog_price_observer>
+		  </observers>
+		</catalog_product_collection_load_after>
+		<customer_logout>
+             <observers>
+				<hideprice_catalog_price_observer>
+					<type>singleton</type>
+					<class>Harriswebworks_Distributorcountry_Model_Observer</class>
+					<method>cleanUpSession</method>
+				</hideprice_catalog_price_observer>
+			</observers>
+		</customer_logout>
+		<customer_login>
+             <observers>
+				<hideprice_catalog_price_observer>
+					<type>singleton</type>
+					<class>Harriswebworks_Distributorcountry_Model_Observer</class>
+					<method>checkDistributorcountry</method>
+				</hideprice_catalog_price_observer>
+			</observers>
+		</customer_login>
+		</events>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <harriswebworks_distributorcountry>
+                    <file>harriswebworks_distributorcountry.xml</file>
+                </harriswebworks_distributorcountry>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Harriswebworks_Distributorcountry>
+                    <files>
+                        <default>Harriswebworks_Distributorcountry.csv</default>
+                    </files>
+                </Harriswebworks_Distributorcountry>
+            </modules>
+        </translate>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Harriswebworks_Distributorcountry before="Mage_Adminhtml">Harriswebworks_Distributorcountry_Adminhtml</Harriswebworks_Distributorcountry>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>
