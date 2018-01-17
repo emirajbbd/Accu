@@ -59,6 +59,14 @@ $table = $this->getConnection()
         ),
         'Exclusive'
     )
+	 ->addColumn(
+        'dea_exempt',
+        Varien_Db_Ddl_Table::TYPE_SMALLINT, null,
+        array(
+            'nullable'  => false,
+        ),
+        'DEA Exempt'
+    )
     ->addColumn(
         'kp_country_id',
         Varien_Db_Ddl_Table::TYPE_TEXT, 255,

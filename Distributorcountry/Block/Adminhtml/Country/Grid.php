@@ -115,6 +115,19 @@ class Harriswebworks_Distributorcountry_Block_Adminhtml_Country_Grid extends Mag
 
             )
         );
+		$this->addColumn(
+            'dea_exempt',
+            array(
+                'header' => Mage::helper('harriswebworks_distributorcountry')->__('DEA Exempt'),
+                'index'  => 'dea_exempt',
+                'type'    => 'options',
+                    'options'    => array(
+                    '1' => Mage::helper('harriswebworks_distributorcountry')->__('Yes'),
+                    '0' => Mage::helper('harriswebworks_distributorcountry')->__('No'),
+                )
+
+            )
+        );
         $this->addColumn(
             'kp_country_id',
             array(
@@ -207,6 +220,29 @@ class Harriswebworks_Distributorcountry_Block_Adminhtml_Country_Grid extends Mag
                 )
             )
         );
+		
+		$this->getMassactionBlock()->addItem(
+            'dea_exempt',
+            array(
+                'label'      => Mage::helper('harriswebworks_distributorcountry')->__('Change DEA Exempt'),
+                'url'        => $this->getUrl('*/*/massExclusive', array('_current'=>true)),
+                'additional' => array(
+                    'flag_dea_exempt' => array(
+                        'name'   => 'flag_dea_exempt',
+                        'type'   => 'select',
+                        'class'  => 'required-entry',
+                        'label'  => Mage::helper('harriswebworks_distributorcountry')->__('DEA Exempt'),
+                        'values' => array(
+                                '1' => Mage::helper('harriswebworks_distributorcountry')->__('Yes'),
+                                '0' => Mage::helper('harriswebworks_distributorcountry')->__('No'),
+                            )
+
+                    )
+                )
+            )
+        );
+		
+		
         return $this;
     }
 

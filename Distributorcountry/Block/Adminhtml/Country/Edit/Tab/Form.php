@@ -86,7 +86,27 @@ class Harriswebworks_Distributorcountry_Block_Adminhtml_Country_Edit_Tab_Form ex
             ),
            )
         );
+		 $fieldset->addField(
+            'dea_exempt',
+            'select',
+            array(
+                'label' => Mage::helper('harriswebworks_distributorcountry')->__('DEA Exempt'),
+                'name'  => 'dea_exempt',
+                'required'  => true,
+                'class' => 'required-entry',
 
+            'values'=> array(
+                array(
+                    'value' => 1,
+                    'label' => Mage::helper('harriswebworks_distributorcountry')->__('Yes'),
+                ),
+                array(
+                    'value' => 0,
+                    'label' => Mage::helper('harriswebworks_distributorcountry')->__('No'),
+                ),
+            ),
+           )
+        );
         $fieldset->addField(
             'kp_country_id',
             'text',

@@ -55,6 +55,27 @@
                 </entities>
             </harriswebworks_distributorcountry_resource>
         </models>
+		
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <harriswebworks_distributorcountry>
+                    <file>harriswebworks_distributorcountry.xml</file>
+                </harriswebworks_distributorcountry>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Harriswebworks_Distributorcountry>
+                    <files>
+                        <default>Harriswebworks_Distributorcountry.csv</default>
+                    </files>
+                </Harriswebworks_Distributorcountry>
+            </modules>
+        </translate>
+    </adminhtml>
+	<frontend>
 		<events>
 		<controller_front_init_before>
            <observers>
@@ -74,6 +95,16 @@
              </hideprice_catalog_price_observer>
            </observers>
          </catalog_product_get_final_price>
+		 
+		 <catalog_product_collection_load_before>
+		  <observers>
+			<hprice_catalog_price_observer>
+			  <type>singleton</type>
+			  <class>Harriswebworks_Distributorcountry_Model_Observer</class>
+			  <method>setDeaExempt</method>
+			</hprice_catalog_price_observer>
+		  </observers>
+		</catalog_product_collection_load_before>
 		 <catalog_product_collection_load_after>
 		  <observers>
 			<hprice_catalog_price_observer>
@@ -102,25 +133,7 @@
 			</observers>
 		</customer_login>
 		</events>
-    </global>
-    <adminhtml>
-        <layout>
-            <updates>
-                <harriswebworks_distributorcountry>
-                    <file>harriswebworks_distributorcountry.xml</file>
-                </harriswebworks_distributorcountry>
-            </updates>
-        </layout>
-        <translate>
-            <modules>
-                <Harriswebworks_Distributorcountry>
-                    <files>
-                        <default>Harriswebworks_Distributorcountry.csv</default>
-                    </files>
-                </Harriswebworks_Distributorcountry>
-            </modules>
-        </translate>
-    </adminhtml>
+		</frontend>
     <admin>
         <routers>
             <adminhtml>
