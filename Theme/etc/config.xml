@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Harriswebworks_Theme>
+            <version>1.0.0</version>
+        </Harriswebworks_Theme>
+    </modules>
+	<global>
+		<helpers>
+            <harriswebworks_theme>
+                <class>Harriswebworks_Theme_Helper</class>
+            </harriswebworks_theme>
+        </helpers>
+        <models>
+            <harriswebworks_theme>
+                <class>Harriswebworks_Theme_Model</class>
+            </harriswebworks_theme>
+        </models>
+		<!--<blocks>
+            <harriswebworks_theme>
+                <class>Harriswebworks_Theme_Block</class>
+            </harriswebworks_theme>
+        </blocks>-->
+	</global>
+    <frontend>
+		<events>
+			<core_block_abstract_prepare_layout_before>
+                <observers>
+                    <harriswebworks_jquery_prepare_layout_before>
+                        <class>Harriswebworks_Theme_Model_Observer</class>
+                        <method>prepareLayoutBefore</method>
+                    </harriswebworks_jquery_prepare_layout_before>
+                </observers>
+            </core_block_abstract_prepare_layout_before>
+		</events>
+	</frontend>
+</config>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <sections>
+        <harriswebworks_theme module="harriswebworks_theme">
+            <label>Theme Settings</label>
+            <tab>harriswebworks</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>1</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <config_head>
+                    <label>Head</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled_jquery module="harriswebworks_theme" translate="label enable">
+                            <label>Enable JQuery At the top</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <comment>JQuery will be loaded at the top of the page.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled_jquery>
+						<google_font module="harriswebworks_theme" translate="label enable">
+							<label>Add External Fonts</label>
+                            <frontend_type>textarea</frontend_type>
+							<backend_model>Harriswebworks_Theme_Model_AddFont</backend_model>
+                            <sort_order>12</sort_order>
+                            <comment>Add font url, One url per line.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</google_font>
+                    </fields>
+                </config_head>
+            </groups>
+        </harriswebworks_theme>
+    </sections>
+</config>

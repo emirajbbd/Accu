@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+    <name>HarriswebworksInfo</name>
+    <version>1.0.0</version>
+    <stability>stable</stability>
+    <license uri="http://opensource.org/licenses/osl-3.0.php">Harriswebworks</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Ajax Cart</summary>
+    <description>Ajax Cart Description</description>
+    <notes>Harriswebworks Info</notes>
+    <authors><author><name>Enamul Haque</name><user>harriswebworks</user><email>emirajbbd@gmail.com</email></author></authors>
+    <date>2018-01-14</date>
+    <time>01:55:04</time>
+    <contents><target name="magelocal"><dir name="Harriswebworks"><dir name="Info"><dir name="Block"><dir name="Adminhtml"><file name="About.php" hash="8d0842268dddedb08cfb51aa51b4377e"/><file name="Info.php" hash="ccfaf82317a83c2ce37de77118ced16b"/></dir></dir><dir name="Helper"><file name="Data.php" hash="c1388be1d1dda9fc66ef64247f505f64"/></dir><dir name="etc"><file name="adminhtml.xml" hash="3c70de50c3f47169334b184e50f6d691"/><file name="config.xml" hash="19587626cc0c231f4c067e05b94ca0a1"/><file name="system.xml" hash="2304863cd4b1d0c3783481750f76d0d8"/></dir></dir></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="images"><dir name="harriswebworks"><file name="HWW-logo.png" hash="53e1dfb727b6a14e0ccb689c5ac737d6"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Harriswebworks_Info.xml" hash="004db68a09e79311c540eca340fd1e58"/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.3.0</min><max>6.0.0</max></php><package><name/><channel>connect.magentocommerce.com/core</channel><min/><max/></package></required></dependencies>
+</package>

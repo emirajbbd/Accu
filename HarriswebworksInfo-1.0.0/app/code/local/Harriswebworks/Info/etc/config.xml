@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Harriswebworks_Info>
+            <version>0.0.1</version>
+        </Harriswebworks_Info>
+    </modules>
+    <global>
+        <blocks>
+            <harriswebworks_info>
+                <class>Harriswebworks_Info_Block</class>
+            </harriswebworks_info>
+        </blocks>
+        <helpers>
+            <harriswebworks_info>
+                <class>Harriswebworks_Info_Helper</class>
+            </harriswebworks_info>
+        </helpers>
+    </global>
+</config>

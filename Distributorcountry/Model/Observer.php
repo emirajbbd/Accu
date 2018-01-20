@@ -37,7 +37,7 @@ class Harriswebworks_Distributorcountry_Model_Observer extends Varien_Event_Obse
 		$data = $this->checkDataInfo();
 		
 		//echo $data[0]->dea_exempt; addAttributeToFilter
-		Mage::log($data,true);
+		//Mage::log($data,true);
 		//&& !in_array($ip,$excludeips)
 		if($data[0]['dea_exempt']!=1 ){
 			$collection = $observer->getCollection()->addAttributeToFilter(
@@ -53,7 +53,7 @@ class Harriswebworks_Distributorcountry_Model_Observer extends Varien_Event_Obse
     )
 );
 			//addFieldToFilter('hazard_code', array('neq' => 'V','eq'=>''),'or');
-			Mage::log((string) $collection->getSelect());
+			//Mage::log((string) $collection->getSelect());
 		}
 	}
 	
